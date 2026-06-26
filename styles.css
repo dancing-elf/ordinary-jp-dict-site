@@ -113,7 +113,6 @@ h2 .jp { font-family: var(--font-jp); color: var(--text-mute); font-size: 17px; 
   width: 100%; height: auto; display: block;
   border-radius: var(--radius); border: 1px solid var(--border);
   background: var(--surface-2);
-  aspect-ratio: 9 / 19.5; object-fit: cover;
 }
 .shot figcaption { text-align: center; color: var(--text-mute); font-size: 14px; margin-top: 8px; }
 
