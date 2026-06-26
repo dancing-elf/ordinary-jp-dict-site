@@ -3,7 +3,7 @@
    Где взять: dash.cloudflare.com → Analytics & Logs → Web Analytics → Add a site
    (метод JS beacon, переносить DNS НЕ нужно) → скопировать token и вставить ниже. */
 (function () {
-  var TOKEN = "CF_TOKEN_HERE"; // ← вставь сюда токен из Cloudflare Web Analytics
+  var TOKEN = "465ab424f82d4684b0ce3aca995724cb"; // токен из Cloudflare Web Analytics
   if (TOKEN === "CF_TOKEN_HERE") return; // пока токен не задан — ничего не грузим
   var s = document.createElement("script");
   s.defer = true;
