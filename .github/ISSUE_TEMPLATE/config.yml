@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ошибка в русской статье → Вародай
+    url: https://warodai.ru
+    about: Русские статьи приходят из проекта Вародай — правки вносятся там и приезжают в приложение с обновлением.
+  - name: Ошибка в английском значении → JMdict
+    url: https://www.edrdg.org/jmdict/j_jmdict.html
+    about: Английские значения приходят из JMdict — правки вносятся там.
