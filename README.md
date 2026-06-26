@@ -1,86 +1,94 @@
-# Обычный японский словарь — сайт
+# Ordinary Japanese Dictionary — website
 
-Статический сайт-визитка приложения **«Обычный японский словарь»** (普通の辞書) — японско-русского словаря,
-плюс публичный трекер обращений (GitHub Issues).
+Static landing/marketing site for the **Ordinary Japanese Dictionary** (普通の辞書) app — a
+Japanese–Russian / Japanese–English dictionary — plus a public issue tracker (GitHub Issues).
 
-Живёт на **GitHub Pages** по адресу **https://dict.notononoto.com**.
+Lives on **GitHub Pages** at **https://dict.notononoto.com**.
 
-Исходники приложения — в отдельном приватном репозитории; здесь только сайт и issue-трекер.
+The app's source lives in a separate private repository; this repo holds only the website and the
+issue tracker.
 
-## Структура
+## Structure
 
-Трёхъязычный сайт: `/ru/`, `/en/`, `/ja/`; корень — распределитель.
+Trilingual site: `/ru/`, `/en/`, `/ja/`; the root is a language dispatcher.
 
 ```
-index.html        — КОРЕНЬ: авто-определение языка (JS → /ru/, /en/ или /ja/) + ручной выбор (no-JS)
-styles.css        — общие стили (без сборки)
-analytics.js      — Cloudflare Web Analytics (cookieless); токен в одном месте
-assets/           — иконка, og-картинка (общие для всех языков)
-screenshots/      — скриншоты для лендинга
-CNAME .nojekyll   — для GitHub Pages
-.github/ISSUE_TEMPLATE/ — баг / идея + редирект на Вародай/JMdict для ошибок контента
-STORE-DATA.md     — шпаргалка для форм Data Safety / App Privacy (не публикуется)
+index.html        — ROOT: auto-detects language (JS → /ru/, /en/ or /ja/) + manual picker (no-JS)
+styles.css        — shared styles (no build step)
+analytics.js      — Cloudflare Web Analytics (cookieless); token lives in one place
+assets/           — icon, og image (shared across languages)
+screenshots/      — landing screenshots
+docs/             — od-dict-format.md (the "full contract" the format pages link to)
+CNAME .nojekyll   — for GitHub Pages
+.github/ISSUE_TEMPLATE/ — bug / idea + redirect to Warodai/JMdict for content errors
+STORE-DATA.md     — crib sheet for Play Data Safety / Apple App Privacy (local only, gitignored)
 
-ru/   index.html · privacy.html (хаб) · privacy-{play,appstore,rustore}.html · support.html · format.html
-en/   index.html · privacy.html (хаб) · privacy-{play,appstore}.html · support.html · format.html
-ja/   index.html · privacy.html (хаб) · privacy-{play,appstore}.html · support.html · format.html
+ru/   index.html · privacy.html (hub) · privacy-{play,appstore,rustore}.html · support.html · format.html
+en/   index.html · privacy.html (hub) · privacy-{play,appstore}.html · support.html · format.html
+ja/   index.html · privacy.html (hub) · privacy-{play,appstore}.html · support.html · format.html
 ```
 
-- Имя: RU/EN — полное **«Обычный японский словарь» / Ordinary Japanese Dictionary**; JA — **普通の辞書** + дескриптор **和露・和英辞典** (НЕ 普通の日本語辞書 — для японца звучит как толковый словарь японского). В шапке-логотипе везде короткое имя.
-- EN/JA отличаются: позиционирование (EN Japanese–English, JA 和露・和英), политики RuStore нет (РФ-канал). Источники те же — Вародай в сборке есть, поэтому кредитнут во всех языках.
-- Ассеты ссылаются абсолютно (`/styles.css`, `/assets/…`); внутренние ссылки — относительные внутри своего языка; `hreflang` + переключатель языка (две другие версии) в шапке.
+- **Name:** RU/EN use the full **«Обычный японский словарь» / Ordinary Japanese Dictionary**; JA uses
+  **普通の辞書** + the descriptor **和露・和英辞典** (NOT 普通の日本語辞書 — to a Japanese reader that
+  reads as a monolingual Japanese dictionary). The header logo uses the short name everywhere.
+- **EN/JA differ:** positioning (EN Japanese–English, JA 和露・和英) and no RuStore policy (RF-only
+  channel). Sources are the same — Warodai ships in the build, so it is credited in every language.
+- Assets are referenced absolutely (`/styles.css`, `/assets/…`); in-language links are relative;
+  every page has `hreflang` + a language switcher (the two other versions) in the header.
 
-Чистый HTML + CSS, никакой сборки. Правите файл — он сразу публикуется.
+Plain HTML + CSS, no build step. Edit a file and it's published as-is.
 
-## Деплой на GitHub Pages (один раз)
+## Deploy on GitHub Pages (one-time)
 
-1. Создать **публичный** репозиторий `dancing-elf/ordinary-jp-dict-site` на GitHub и запушить эту папку
-   (см. ниже).
-2. **Settings → Pages**: Source = «Deploy from a branch», branch = `main`, папка = `/ (root)`.
-3. **Settings → Pages → Custom domain** = `dict.notononoto.com` → Save. Файл `CNAME` уже в репо.
-4. В DNS домена `notononoto.com` добавить запись:
+1. A **public** repo `dancing-elf/ordinary-jp-dict-site` on GitHub holds this folder.
+2. **Settings → Pages**: Source = "Deploy from a branch", branch = `main`, folder = `/ (root)`.
+3. **Settings → Pages → Custom domain** = `dict.notononoto.com` → Save (the `CNAME` file is already in
+   the repo, so GitHub picks this up automatically).
+4. Add a DNS record for `notononoto.com` (at Porkbun):
    ```
    CNAME   dict   →   dancing-elf.github.io.
    ```
-   (если DNS на Cloudflare — только «DNS only» / серое облако, не проксировать).
-5. Дождаться зелёной галки проверки домена → включить **Enforce HTTPS**
-   (сертификат Let's Encrypt выпустится автоматически, иногда до часа).
+   (If DNS sits behind Cloudflare, keep it **DNS only** / grey cloud — do not proxy.)
+5. Wait for the domain check to go green → enable **Enforce HTTPS** (Let's Encrypt cert issues
+   automatically, sometimes up to an hour).
 
-Поддомен не требует apex A-записей и переноса nameserver'ов.
+A subdomain needs no apex A-records and no nameserver move.
 
-## Перед публикацией — проверить
+> Before the custom domain resolves, `dancing-elf.github.io/ordinary-jp-dict-site/` renders broken
+> (root-absolute asset paths) — that's expected. The site only looks right at `dict.notononoto.com`
+> (or locally via `python3 -m http.server`).
 
-- [ ] заменить заглушки ссылок на магазины в `index.html` (блок `.stores`);
-- [ ] положить скриншоты в `screenshots/` и иконку/og в `assets/` (см. `screenshots/README.md`);
-- [ ] **сверить §4 каждой `privacy-*.html` с фактической сборкой соответствующего стора** — это
-      юридически значимые страницы; добавить/убрать сервисы по факту релиза;
-- [ ] вписать в консоль каждого стора СВОЙ URL политики (таблица в `STORE-DATA.md`);
-- [ ] заполнить формы Data Safety (Play) и App Privacy (Apple) по `STORE-DATA.md`;
-- [ ] проверить дату «действует с …» во всех `privacy-*.html`;
-- [ ] контакт в политиках = `notononoto@gmail.com` (баг-репорты идут только через GitHub Issues).
-- [ ] вставить токен Cloudflare Web Analytics в `analytics.js` (dash.cloudflare.com → Web Analytics →
-      Add a site, метод JS beacon, DNS переносить не нужно). Cookieless → баннер согласия не нужен.
-
-URL политики по магазинам (язык = язык листинга):
-
-| Листинг | URL |
-|---|---|
-| Google Play (RU / EN / JA) | `.../ru/privacy-play.html` · `.../en/privacy-play.html` · `.../ja/privacy-play.html` |
-| App Store (RU / EN / JA) | `.../ru/privacy-appstore.html` · `.../en/privacy-appstore.html` · `.../ja/privacy-appstore.html` |
-| RuStore | `https://dict.notononoto.com/ru/privacy-rustore.html` |
-
-(база — `https://dict.notononoto.com`)
-
-(Play даёт ОДНО поле privacy-URL на приложение → бери язык основного листинга; на странице есть переключатель. Apple позволяет локализованный privacy-URL по локали.)
-
-## Первый пуш
+## Publishing updates
 
 ```sh
 cd ~/ordinary-dict-site
-git init
 git add .
-git commit -m "site: лендинг, политика конфиденциальности, поддержка"
-git branch -M main
-git remote add origin git@github.com:dancing-elf/ordinary-jp-dict-site.git
-git push -u origin main
+git commit -m "site: <what changed>"
+git push
 ```
+
+## Pre-launch checklist
+
+- [ ] replace the store-link placeholders in each `index.html` (`.stores` block);
+- [ ] add screenshots to `screenshots/` and the icon/og image to `assets/` (see `screenshots/README.md`);
+- [ ] **verify the "Services" section of each `privacy-*.html` against the actually-shipped build** —
+      these are legally meaningful pages; add/remove providers per the real release;
+- [ ] put the correct per-listing privacy-policy URL in each store console (table below);
+- [ ] fill the Data Safety (Play) and App Privacy (Apple) forms per `STORE-DATA.md`;
+- [ ] check the "effective date" in every `privacy-*.html`;
+- [ ] contact in the policies = `notononoto@gmail.com` (bug reports go through GitHub Issues only);
+- [ ] paste the Cloudflare Web Analytics token into `analytics.js` (dash.cloudflare.com → Web Analytics
+      → Add a site, JS beacon method, no DNS move). Cookieless → no consent banner needed.
+
+## Privacy-policy URLs per listing
+
+Base: `https://dict.notononoto.com`
+
+| Listing | URL |
+|---|---|
+| Google Play (RU / EN / JA) | `/ru/privacy-play.html` · `/en/privacy-play.html` · `/ja/privacy-play.html` |
+| App Store (RU / EN / JA) | `/ru/privacy-appstore.html` · `/en/privacy-appstore.html` · `/ja/privacy-appstore.html` |
+| RuStore | `/ru/privacy-rustore.html` |
+
+(Google Play has a single privacy-URL field per app → use your primary listing's language; the page has
+a switcher. Apple allows a localized privacy URL per locale.)
