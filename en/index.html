@@ -100,14 +100,35 @@
     </div>
   </section>
 
-  <section id="privacy-note">
+  <section id="why">
     <div class="wrap">
-      <h2>Private by default <span class="jp">秘</span></h2>
-      <p class="section-intro">
-        Your query text, opened words and history <strong>never leave the device</strong> and are not
-        sent to analytics. The app shows no ads and does not use precise location. More in the
-        <a href="privacy.html">privacy policy</a>.
-      </p>
+      <h2>About the dictionary <span class="jp">辞書について</span></h2>
+      <div class="essay">
+        <p>There are plenty of electronic Japanese dictionaries.</p>
+
+        <p>But on a trip to Japan I kept missing very basic things:</p>
+
+        <ul>
+          <li>OCR is often paid, and I was not ready to pay just for OCR;</li>
+          <li>dictionaries with Russian are often thin — probably because Warodai's license does not fit paid products well, or simply because the market is small and people rarely think about it;</li>
+          <li>many dictionaries try to keep you inside the app, while I wanted quick jumps to WaniKani, which I actively use for kanji;</li>
+          <li>I wanted an easy way to export lookup history, so the dictionary would not push its built-in flashcards instead of Anki;</li>
+          <li>I wanted more visual settings, at least enough to tune the interface a little;</li>
+          <li>many interfaces contain a lot of English and other unrelated labels, which distract from the Japanese.</li>
+        </ul>
+
+        <p>Dictionaries with unique features and strong content — such as Monokakido or the built-in iOS dictionaries — can be forgiven a lot. But most dictionary apps are built on top of JMdict and mostly differ in the interface around the same data.</p>
+
+        <p>So I decided to make something that solved my own problem. I hope it can be useful to someone else too.</p>
+
+        <p>Obviously, not everyone in the world needs Russian. So I added custom dictionary import in the app's own format. For mobile dictionaries, this still seems fairly rare.</p>
+
+        <p>Custom dictionaries are a superset of <a href="https://github.com/scriptin/jmdict-simplified">jmdict-simplified</a>. That means JMdict dictionaries can be imported as-is, although example sentences there are English-only. I hope the <a href="format.html">format description</a> and modern LLMs will help people who need this.</p>
+
+        <p>Why not use the Yomitan format? Because it is too varied for this app.</p>
+
+        <p>Did I make everything exactly the way I wanted? No. I spent a lot of effort on layout and typography, but I am not a designer, and I fear it shows. OCR could also split text into sentences better.</p>
+      </div>
     </div>
   </section>
 
