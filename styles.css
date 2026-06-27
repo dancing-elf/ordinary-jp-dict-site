@@ -96,6 +96,11 @@ h2 .jp { font-family: var(--font-jp); color: var(--text-mute); font-size: 17px; 
 }
 .lede strong { color: var(--text); font-weight: 600; }
 
+.essay { max-width: 740px; color: var(--text-dim); }
+.essay p { margin: 0 0 16px; }
+.essay ul { margin: 0 0 18px; padding-left: 20px; }
+.essay li { margin: 7px 0; }
+
 /* ---- feature grid ---- */
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
 .feature {
