@@ -40,6 +40,18 @@
   <h1>Формат словаря для импорта <span style="font-family:var(--font-jp);color:var(--text-mute);font-size:.6em">辞書形式</span></h1>
   <p class="updated"><code>od-dict/1</code> · контракт импорта пользовательских словарей</p>
 
+  <div class="callout plain">
+    <strong>Просто хотите добавить словарь?</strong> Самый простой путь: скачайте из
+    <strong>релизов jmdict-simplified</strong> готовый <strong>архив нужного языка</strong> —
+    <code>jmdict-&lt;язык&gt;-*.json.zip</code> (или <code>.tgz</code>), например <code>jmdict-rus</code>,
+    <code>jmdict-eng</code>, <code>jmdict-ger</code> — и импортируйте архив как есть. Наш формат это
+    надмножество, так что ни конвертировать, ни распаковывать не нужно. А <code>jmdict-all</code>
+    (все языки в одном файле) брать не стоит — один огромный словарь неудобен.
+    → <a href="https://github.com/scriptin/jmdict-simplified/releases">релизы jmdict-simplified</a><br><br>
+    Хотите собрать свой словарь из другого источника (словарь Yomitan, CSV, ваши данные)? Дальше —
+    подробное описание формата.
+  </div>
+
   <p>Приложение «Обычный японский словарь» умеет подключать ваши собственные словари. Один словарь — это
     <strong>один JSON-файл</strong> в формате <code>od-dict/1</code>. Вы готовите такой файл, конвертируя
     существующий словарь (например, словарь Yomitan) — вручную или с помощью LLM, — а приложение строит

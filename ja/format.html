@@ -40,6 +40,17 @@
   <h1>辞書インポート形式 <span style="font-family:var(--font-jp);color:var(--text-mute);font-size:.6em">辞書形式</span></h1>
   <p class="updated"><code>od-dict/1</code> · 自作辞書をインポートするための仕様</p>
 
+  <div class="callout plain">
+    <strong>辞書を追加したいだけ?</strong> いちばん簡単なのは、<strong>jmdict-simplified のリリース</strong>
+    から<strong>欲しい言語の</strong>完成済み<strong>アーカイブ</strong>
+    （<code>jmdict-&lt;言語&gt;-*.json.zip</code> または <code>.tgz</code>。例：<code>jmdict-eng</code>、
+    <code>jmdict-rus</code>、<code>jmdict-ger</code>）をダウンロードして、そのままインポートすることです。
+    この形式はスーパーセットなので、変換も解凍も不要です。<code>jmdict-all</code>（全言語が 1 ファイル）は
+    巨大で扱いにくいので選ばないでください。
+    → <a href="https://github.com/scriptin/jmdict-simplified/releases">jmdict-simplified のリリース</a><br><br>
+    別の出典（Yomitan 辞書・CSV・自作データ）から自分で作りたい場合は、以下で形式を詳しく説明します。
+  </div>
+
   <p>アプリは自分の辞書を読み込めます。1 つの辞書は <code>od-dict/1</code> 形式の<strong>1 つの JSON
     ファイル</strong>です。既存の辞書（例：Yomitan 辞書）を — 手作業または LLM で — 変換して用意すると、
     アプリがそこから自前のデータベースを構築します。</p>

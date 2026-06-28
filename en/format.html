@@ -40,6 +40,18 @@
   <h1>Dictionary import format <span style="font-family:var(--font-jp);color:var(--text-mute);font-size:.6em">辞書形式</span></h1>
   <p class="updated"><code>od-dict/1</code> · the contract for importing custom dictionaries</p>
 
+  <div class="callout plain">
+    <strong>Just want to add a dictionary?</strong> The simplest path: from the
+    <strong>jmdict-simplified releases</strong> download a ready-made <strong>archive for your
+    language</strong> — <code>jmdict-&lt;lang&gt;-*.json.zip</code> (or <code>.tgz</code>), e.g.
+    <code>jmdict-eng</code>, <code>jmdict-rus</code>, <code>jmdict-ger</code> — and import the archive
+    as-is. This format is a superset, so no conversion and no unzipping is needed. Don't grab
+    <code>jmdict-all</code> (every language in one file) — one giant dictionary is unwieldy.
+    → <a href="https://github.com/scriptin/jmdict-simplified/releases">jmdict-simplified releases</a><br><br>
+    Want to build your own from another source (a Yomitan dictionary, a CSV, your own data)? The rest of
+    this page describes the format in detail.
+  </div>
+
   <p>The app can load your own dictionaries. One dictionary is <strong>one JSON file</strong> in the
     <code>od-dict/1</code> format. You produce it by converting an existing dictionary (for example a
     Yomitan dictionary) — by hand or with an LLM — and the app builds its own database from it.</p>

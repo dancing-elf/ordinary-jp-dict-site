@@ -149,6 +149,7 @@ h2 .jp { font-family: var(--font-jp); color: var(--text-mute); font-size: 17px; 
   color: var(--text-dim);
 }
 .prose .callout strong { color: var(--text); }
+.prose .callout.plain { background: var(--surface); }
 .prose code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em;
   background: var(--surface-2); padding: 1px 6px; border-radius: 5px;
