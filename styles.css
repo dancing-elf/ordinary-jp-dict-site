@@ -1,35 +1,20 @@
 /* Обычный словарь — site styles. Plain CSS, no build step, no JS.
-   Light/dark via prefers-color-scheme. Warm stone palette, echoing the app. */
+   Light-only Ink palette — monochrome, echoing the app's Ink theme. */
 
 :root {
-  --bg: #f7f5f1;
-  --surface: #ffffff;
-  --surface-2: #f0ede7;
-  --border: #e3ded6;
-  --text: #1f1d1a;
-  --text-dim: #4a463f;
-  --text-mute: #8a8479;
-  --accent: #b4452f;          /* warm vermilion, like a hanko */
-  --accent-soft: #f3e3df;
+  --bg: #f5f5f4;
+  --surface: #fcfcfb;
+  --surface-2: #e8e8e7;
+  --border: rgba(10, 10, 10, 0.10);
+  --text: #0e0e0d;
+  --text-dim: #5f5f5d;
+  --text-mute: #9c9c99;
+  --accent: #0e0e0d;          /* Ink — monochrome, accent = text */
+  --accent-soft: #dfdfdd;
   --radius: 14px;
   --maxw: 880px;
   --font-sans: "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   --font-serif: "Spectral", ui-serif, Georgia, "Times New Roman", serif;
-  --font-jp: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #16140f;
-    --surface: #201d17;
-    --surface-2: #26221b;
-    --border: #332e25;
-    --text: #f3efe7;
-    --text-dim: #cbc5b8;
-    --text-mute: #908a7c;
-    --accent: #e0775f;
-    --accent-soft: #2e211c;
-  }
 }
 
 * { box-sizing: border-box; }
@@ -61,14 +46,11 @@ a:hover { text-decoration: underline; }
 .topbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; min-height: 58px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--text); }
 .brand img { width: 30px; height: 30px; border-radius: 7px; }
-.brand .jp { font-family: var(--font-jp); color: var(--text-mute); font-size: 15px; }
 .topbar nav { margin-left: auto; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 15px; }
-@media (max-width: 560px) { .brand .jp { display: none; } }
 .topbar nav a { color: var(--text-dim); }
 
 /* ---- hero ---- */
 .hero { padding: 64px 0 36px; text-align: center; }
-.hero .kicker { font-family: var(--font-jp); color: var(--accent); letter-spacing: .12em; font-size: 15px; }
 .hero h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.08; margin: 14px 0 8px; letter-spacing: -.01em; }
 .hero .lead { font-size: clamp(18px, 2.6vw, 21px); color: var(--text-dim); max-width: 820px; margin: 0 auto; }
 
@@ -87,7 +69,6 @@ a:hover { text-decoration: underline; }
 section { padding: 40px 0; }
 section + section { border-top: 1px solid var(--border); }
 h2 { font-size: 27px; letter-spacing: -.01em; margin: 0 0 6px; }
-h2 .jp { font-family: var(--font-jp); color: var(--text-mute); font-size: 17px; font-weight: 400; margin-left: 10px; }
 .section-intro { color: var(--text-dim); max-width: 640px; margin: 0 0 26px; }
 
 .lede {
@@ -107,7 +88,6 @@ h2 .jp { font-family: var(--font-jp); color: var(--text-mute); font-size: 17px; 
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 18px 18px 20px;
 }
-.feature .ic { font-family: var(--font-jp); font-size: 22px; color: var(--accent); display: block; margin-bottom: 8px; }
 .feature h3 { font-size: 17px; margin: 0 0 4px; }
 .feature p { margin: 0; color: var(--text-dim); font-size: 15px; line-height: 1.5; }
 
