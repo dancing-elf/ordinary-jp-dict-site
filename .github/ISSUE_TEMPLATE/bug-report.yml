@@ -1,0 +1,39 @@
+name: Проблема в приложении
+description: Падение, зависание или что-то работает не так
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Что произошло
+      placeholder: Опишите проблему.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как воспроизвести
+      placeholder: |
+        1. Открыл …
+        2. Нажал …
+        3. Случилось …
+  - type: input
+    id: version
+    attributes:
+      label: Версия приложения
+      description: Экран «О словаре»
+      placeholder: 0.1.0
+  - type: input
+    id: device
+    attributes:
+      label: Устройство и версия ОС
+      placeholder: Pixel 7, Android 15 / iPhone 15, iOS 18
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Откуда установлено
+      options:
+        - Google Play
+        - RuStore
+        - App Store
+        - Другое

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>辞書インポート形式（od-dict/1）— 普通の辞書</title>
+<meta name="description" content="od-dict/1 形式 — 普通の辞書が辞書を読み込む JSON ファイルの仕様。jmdict-simplified のスーパーセット。">
+<meta name="theme-color" content="#f5f5f4">
+<link rel="icon" href="/assets/icon.png">
+<link rel="canonical" href="https://dict.notononoto.com/ja/format.html">
+<link rel="alternate" hreflang="ja" href="https://dict.notononoto.com/ja/format.html">
+<link rel="alternate" hreflang="ru" href="https://dict.notononoto.com/ru/format.html">
+<link rel="alternate" hreflang="en" href="https://dict.notononoto.com/en/format.html">
+<link rel="alternate" hreflang="x-default" href="https://dict.notononoto.com/">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="/assets/icon.png" alt="">
+      <span>普通の辞書</span>
+    </a>
+    <nav>
+      <a href="index.html#features">機能</a>
+      <a href="index.html#sources">出典</a>
+      <a href="support.html">サポート</a>
+      <a href="privacy.html">プライバシー</a>
+      <a href="format.html">形式</a>
+      <a href="/ru/format.html" class="lang">RU</a>
+      <a href="/en/format.html" class="lang">EN</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section>
+<div class="wrap prose">
+
+  <h1>辞書インポート形式</h1>
+  <p class="updated"><code>od-dict/1</code> · 自作辞書をインポートするための仕様</p>
+
+  <div class="callout">
+    <strong>辞書を追加したいだけ?</strong> いちばん簡単なのは、<strong>jmdict-simplified のリリース</strong>
+    から<strong>欲しい言語の</strong>完成済み<strong>アーカイブ</strong>
+    （<code>jmdict-&lt;言語&gt;-*.json.zip</code> または <code>.tgz</code>。例：<code>jmdict-eng</code>、
+    <code>jmdict-rus</code>、<code>jmdict-ger</code>）をダウンロードして、そのままインポートすることです。
+    この形式はスーパーセットなので、変換も解凍も不要です。<code>jmdict-all</code>（全言語が 1 ファイル）は
+    巨大で扱いにくいので選ばないでください。
+    → <a href="https://github.com/scriptin/jmdict-simplified/releases">jmdict-simplified のリリース</a><br><br>
+    別の出典（Yomitan 辞書・CSV・自作データ）から自分で作りたい場合は、以下で形式を詳しく説明します。
+  </div>
+
+  <p>アプリは自分の辞書を読み込めます。1 つの辞書は <code>od-dict/1</code> 形式の<strong>1 つの JSON
+    ファイル</strong>です。既存の辞書（例：Yomitan 辞書）を — 手作業または LLM で — 変換して用意すると、
+    アプリがそこから自前のデータベースを構築します。</p>
+
+  <p>この形式は <strong><code>jmdict-simplified</code> のスーパーセット</strong>
+    （<a href="https://github.com/scriptin/jmdict-simplified">scriptin/jmdict-simplified</a>）です。
+    jmdict-simplified の正しい語はそのままここでも有効なので、その出典ならほぼ変換不要です。</p>
+
+  <div class="callout">
+    このページは読みやすくまとめた要約です。コードと突き合わせた完全な仕様はリポジトリにあります：
+    <a href="https://github.com/dancing-elf/ordinary-jp-dict-site/blob/main/docs/od-dict-format.md"><code>docs/od-dict-format.md</code></a>。
+  </div>
+
+  <h2>1. ファイル全体</h2>
+  <pre><code>{
+  "format": "od-dict/1",          // 必須、この文字列ちょうど
+  "source": "custom",             // 必須；この辞書の id（§2）
+  "metadata": {                   // 任意；表示・出自情報のみ
+    "title": "My Dictionary",
+    "license": "CC BY-SA 4.0",
+    "url": "https://…"
+  },
+  "tags": { "v1": "Ichidan verb" }, // 任意；使用されません（§6）
+  "words": [
+    {
+      "id": "1259420",            // 必須；ファイル内で一意（§3）
+      "kanji": ["食べる"],         // 任意；かなのみの語では省略
+      "kana":  ["たべる"],         // 少なくとも 1 つの形（kanji か kana）が必要
+      "sense": [                  // 必須；1 つ以上
+        {
+          "partOfSpeech": ["v1"], // 任意；コードのみ、自由文は不可（§4）
+          "misc": ["transitive"], // 任意；自由なラベル、そのまま表示
+          "gloss": [              // 訳語
+            { "lang": "en", "text": "to eat" },
+            "食べる"               // 裸の文字列 = { lang: "ru", origin: "original" }
+          ],
+          "examples": [ ["ご飯を食べる", "ご飯を食べる"] ],  // 任意；[日本語, 訳] の組
+          "references": []        // 任意；相互参照（§5）
+        }
+      ]
+    }
+  ]
+}</code></pre>
+
+  <h2>2. トップレベル</h2>
+  <table>
+    <tr><th>フィールド</th><th>必須</th><th>意味</th></tr>
+    <tr><td><code>format</code></td><td>はい</td><td>ちょうど <code>"od-dict/1"</code>。</td></tr>
+    <tr><td><code>source</code></td><td>はい</td><td>辞書全体の id 文字列。安定したスラッグ（<code>"custom"</code>、<code>"jitendex"</code> など）。<code>id</code> と相互参照の名前空間になります。未知の source は組み込み辞書の<strong>後ろ</strong>に並ぶだけで、拒否はされません。</td></tr>
+    <tr><td><code>metadata</code></td><td>いいえ</td><td>自由なオブジェクト（title, license, url）。表示用に保存されるだけで、ビルダーは読みません。</td></tr>
+    <tr><td><code>tags</code></td><td>いいえ</td><td>jmdict-simplified 互換の <code>コード → ラベル</code> マップ。<strong>使用されません</strong>（§6）。表示したいラベルは <code>misc</code> に直接入れてください。</td></tr>
+    <tr><td><code>words</code></td><td>はい</td><td>項目の配列。</td></tr>
+  </table>
+  <p class="warn">セキュリティ：インポート時に <code>source = "custom"</code> を強制し、ファイルが <code>"jmdict"</code> 等を名乗れないようにする設計ですが、<strong>未実装</strong>です。検証付きインポータが入るまで <code>source</code> は参考値として扱ってください。</p>
+
+  <h2>3. 語と同一性</h2>
+  <pre><code>{
+  "id": "1259420",
+  "homograph": "II",          // 任意；見出し+読みが衝突する際の区別子
+  "label": "colloquial",      // 任意；カードに表示される項目レベルのタグ
+  "isExpression": true,       // 任意；複数語の表現
+  "common": true,             // 任意；高頻度の項目
+  "kanji": ["食べる", "喰べる"],  // 0…n の表記
+  "kana":  ["たべる"],          // 0…n の読み
+  "sense": [ /* … */ ]
+}</code></pre>
+  <p>同一性は <code>(source, id)</code> で、<strong>UNIQUE</strong> です。</p>
+  <ul>
+    <li><strong><code>id</code> はファイル内で一意である必要があります。</strong> テーブルは
+      <code>UNIQUE(source, source_entry_id)</code> に対する単純な <code>INSERT</code> で書かれるため、
+      <strong><code>id</code> の重複はインポートのバッチを失敗・中断させます</strong>（黙って無視され
+      ません）。出典の id を使うか、無ければ安定した一意の値（連番や見出し語）を作ってください。</li>
+    <li><code>kanji</code>/<code>kana</code> の要素は裸の文字列（通常）か jmdict-simplified の
+      オブジェクト <code>{ "text": "…" }</code>。<strong>読まれるのは <code>text</code> だけ</strong>で、
+      残りは受理されますが破棄されます。裸の文字列を推奨。</li>
+    <li>語には<strong>少なくとも 1 つの形</strong>が必要です。日本語では <code>kana</code> を与え、
+      かなのみの語では <code>kanji</code> を省略します。</li>
+  </ul>
+  <p><strong>グループ化。</strong> アプリは<strong>（見出し + 読み）のグループごとに 1 枚のカード</strong>
+    を、辞書をまたいで統合して表示します。<em>自分の</em>ファイルでは<strong>項目ごとに 1 語</strong>
+    を出力し、すべての表記を <code>kanji</code> に、すべての読みを <code>kana</code> に、すべての意味を
+    <code>sense</code> にまとめてください。出典が 1 項目を複数行に分けている場合（Yomitan は共有の
+    <code>sequence</code> で行う）、先に 1 語へ統合しないと 1 項目が複数カードになります。</p>
+
+  <h2>4. <code>partOfSpeech</code> — 検索を静かに壊しうる唯一のフィールド</h2>
+  <p>誤った値が<strong>エラーなしに語を検索から消す</strong>唯一のフィールドです。POS は辞書形や読みでの
+    検索には<em>影響しません</em> — <code>食べる</code> も <code>たべる</code> も常に見つかります。POS は
+    たった 1 か所、<strong>活用解除のゲート</strong>でのみ使われます — ユーザーが入力した<em>活用形</em>
+    （<code>食べた</code>、<code>静かな</code>）から語を見つける処理です。</p>
+  <table>
+    <tr><th>項目の POS</th><th>判定</th><th>効果</th></tr>
+    <tr><td>無し / 活用クラスでない</td><td><code>weak</code></td><td>それでも見つかる（順位がやや下がる）</td></tr>
+    <tr><td><strong>一致</strong>する活用クラス</td><td><code>confirmed</code></td><td>見つかる（通常順位）</td></tr>
+    <tr><td><strong>不一致</strong>の活用クラス</td><td><code>rejected</code></td><td><strong>除外 — その活用形からは見つからない</strong></td></tr>
+  </table>
+  <p class="warn"><strong>活用クラスが分からなければ <code>partOfSpeech</code> ごと省いてください。</strong>
+    無しは安全（<code>weak</code>）、誤りは致命的（<code>rejected</code>）。当てずっぽうより省略が安全です。</p>
+  <ul>
+    <li><strong>コードのみ、自由文は不可。</strong> 読めるラベル（「verb」「honorific」）は <code>misc</code>
+      に入れれば、そのまま表示されます。</li>
+    <li>意味を持つのは<strong>活用クラスのみ</strong>。他のコード（<code>n</code>、<code>exp</code>、
+      <code>vt</code>、<code>adv</code> など）は検索では無視されます — 無害ですが無意味です。</li>
+    <li><strong>Yomitan の罠：潰れた <code>v5</code> をコピーしないこと。</strong> エンジンに
+      <code>v5</code> クラスは無く、具体的なもの（<code>v5k</code>、<code>v5r</code> …）が必要です。
+      裸の <code>"v5"</code> は何にも一致せず <code>rejected</code> となり、無タグより<em>悪い</em>です。
+      <code>definitionTags</code> から具体コードを取るか、辞書形の末尾かなで展開するか、省略を。</li>
+  </ul>
+  <p>エンジンが理解する活用クラス：</p>
+  <pre><code>v1                              一段（-ru）：        食べる, 見る
+v5u v5k v5g v5s v5t v5n v5b v5m v5r   五段（辞書形の末尾かなで区別）
+vk                              来る（kuru）
+vs vs-i vs-s                    する動詞
+adj-i                           い形容詞：            高い, 良い
+adj-na                          な形容詞：            静か, 綺麗</code></pre>
+
+  <h2>5. 語釈・言語・相互参照</h2>
+  <pre><code>"гулять"                                  // 裸の文字列 = { "lang": "ru", "origin": "original" }
+{ "lang": "en", "text": "to take a walk" }
+{ "lang": "ru", "text": "то же, что {0}", "origin": "original" }</code></pre>
+  <ul>
+    <li><strong>裸の文字列はロシア語</strong>（<code>lang: "ru"</code>）。他の言語ではオブジェクト形式で
+      <code>lang</code> を指定します。</li>
+    <li><code>origin</code> は <code>"original"</code>（既定）か <code>"machine"</code>（AI 生成）；表示のみ。</li>
+    <li><strong><code>lang</code> と検索の関係：</strong> <code>lang: "ru"</code> の語釈はロシア語検索
+      チャンネルへ、<strong>それ以外の <code>lang</code> はすべて英語チャンネルへ</strong>入ります。
+      チャンネルはユーザーが入力した文字種で選ばれます（キリル → ru、ラテン → en）。よって和英辞書の
+      語釈は英語検索に届くよう <code>lang: "en"</code> にする必要があります。単言語の日本語語釈
+      （<code>lang: "ja"</code>）は en チャンネルに入り、事実上「表示専用」になります — 見出しと読みでは
+      見つかりますが、定義文では見つかりません。</li>
+  </ul>
+  <p><strong>相互参照</strong> — 語釈文中の ICU プレースホルダ <code>{0}</code>、<code>{1}</code> … を
+    <code>references</code> 配列で解決します：</p>
+  <pre><code>{
+  "gloss": [ { "lang": "en", "text": "polite form of {0}" } ],
+  "references": [ { "label": "", "to": "1234567", "text": "言う" } ]
+}</code></pre>
+  <ul>
+    <li><code>{0}</code> はその位置で <code>references[0].text</code> に、タップ可能なリンクとして置き換えられます。</li>
+    <li><code>to</code> は<strong>同じファイル内</strong>の対象語の <code>id</code> で、リンクは
+      <code>{ source: &lt;この辞書&gt;, id: to }</code> を開きます。一致しない <code>to</code> は何も開きません。</li>
+    <li><code>label</code> は関係マーカー（<code>"see"</code>、<code>"cf."</code>）で、<code>{n}</code> の無い
+      末尾参照に使います。語釈文中のリテラル <code>{</code> は <code>'{'</code>（ICU エスケープ）と書きます。</li>
+  </ul>
+
+  <h2>6. この形式が持たないもの</h2>
+  <p>次のものはアプリが表記・読みをキーに自前データから付与し、辞書間で一致させます — <strong>指定不要</strong>
+    です：ピッチアクセント、ふりがな、ローマ字、頻度／「common」、音声、JLPT・WaniKani レベル、漢字の
+    内訳。また（互換のため受理はされるが）使用されないもの：トップレベルの <code>tags</code> マップ、
+    形ごと・語釈ごとの追加属性。カードは <code>misc</code>/<code>field</code>/<code>dialect</code> を
+    <strong>自由文字列としてそのまま</strong>表示します（コード展開なし）ので、読めるラベルを直接入れてください。</p>
+
+  <h2>7. 最小例</h2>
+  <p>最小の語 — かなのみと語釈 1 つ：</p>
+  <pre><code>{ "id": "w1", "kana": ["ありがとう"], "sense": [ { "gloss": [ { "lang": "en", "text": "thank you" } ] } ] }</code></pre>
+  <pre><code>// (a) JA→EN 五段。POS は具体クラス v5k で、Yomitan の "v5" ではない。
+{ "id": "1578850", "kanji": ["書く"], "kana": ["かく"],
+  "sense": [ { "partOfSpeech": ["v5k", "vt"],
+    "gloss": [ { "lang": "en", "text": "to write; to compose; to pen" } ] } ] }
+
+// (b) JA→EN 内部相互参照つき。
+{ "id": "敷衍", "kanji": ["敷衍", "敷延"], "kana": ["ふえん"],
+  "sense": [ { "gloss": [ { "lang": "en", "text": "amplification (cf. {0})" } ],
+    "references": [ { "label": "", "to": "演繹", "text": "演繹" } ] } ] }
+
+// (c) かなのみの な形容詞。adj-na は活用クラスなのでタグ付けが有効。
+{ "id": "1000230", "kana": ["きれい"],
+  "sense": [ { "partOfSpeech": ["adj-na"], "gloss": [ { "lang": "en", "text": "pretty; clean; neat" } ] } ] }</code></pre>
+
+  <h2>8. POS 許可リスト</h2>
+  <p>これらのいずれか（またはそれで始まる jmdict サブクラス）の場合のみ <code>partOfSpeech</code> に
+    コードを入れてください。それ以外は人間向けラベルを <code>misc</code> に入れ、ここでは省略します。</p>
+  <pre><code>v1
+v5u v5k v5g v5s v5t v5n v5b v5m v5r
+vk
+vs vs-i vs-s
+adj-i
+adj-na</code></pre>
+  <p>潰れた Yomitan の <code>"v5"</code> → 辞書形の末尾かなで展開：
+    <code>う→v5u  く→v5k  ぐ→v5g  す→v5s  つ→v5t  ぬ→v5n  ぶ→v5b  む→v5m  る→v5r</code>。
+    不明なら省略。</p>
+
+  <p style="margin-top:36px"><a href="index.html">← トップへ</a></p>
+
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© notononoto · 普通の辞書</span>
+    <nav class="sp">
+      <a href="index.html">トップ</a>
+      <a href="support.html">サポート</a>
+      <a href="privacy.html">プライバシー</a>
+    </nav>
+  </div>
+</footer>
+
+<script defer src="/analytics.js"></script>
+
+</body>
+</html>

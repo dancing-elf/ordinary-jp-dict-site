@@ -1,0 +1,16 @@
+name: Идея или пожелание
+description: Чего не хватает или что можно сделать удобнее
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Идея
+      placeholder: Что хотелось бы и зачем.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Версия приложения (необязательно)
+      placeholder: 0.1.0

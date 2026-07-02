@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Формат словаря для импорта (od-dict/1) — Обычный японский словарь</title>
+<meta name="description" content="Спецификация формата od-dict/1 — JSON-файл, из которого приложение «Обычный японский словарь» импортирует пользовательский словарь. Надмножество jmdict-simplified.">
+<meta name="theme-color" content="#f5f5f4">
+<link rel="icon" href="/assets/icon.png">
+<link rel="canonical" href="https://dict.notononoto.com/ru/format.html">
+<link rel="alternate" hreflang="ru" href="https://dict.notononoto.com/ru/format.html">
+<link rel="alternate" hreflang="en" href="https://dict.notononoto.com/en/format.html">
+<link rel="alternate" hreflang="ja" href="https://dict.notononoto.com/ja/format.html">
+<link rel="alternate" hreflang="x-default" href="https://dict.notononoto.com/">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="/assets/icon.png" alt="">
+      <span>Обычный словарь</span>
+    </a>
+    <nav>
+      <a href="index.html#features">Возможности</a>
+      <a href="index.html#sources">Источники</a>
+      <a href="support.html">Поддержка</a>
+      <a href="privacy.html">Конфиденциальность</a>
+      <a href="format.html">Формат</a>
+      <a href="/en/format.html" class="lang">EN</a>
+      <a href="/ja/format.html" class="lang">JA</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section>
+<div class="wrap prose">
+
+  <h1>Формат словаря для импорта</h1>
+  <p class="updated"><code>od-dict/1</code> · контракт импорта пользовательских словарей</p>
+
+  <div class="callout">
+    <strong>Просто хотите добавить словарь?</strong> Самый простой путь: скачайте из
+    <strong>релизов jmdict-simplified</strong> готовый <strong>архив нужного языка</strong> —
+    <code>jmdict-&lt;язык&gt;-*.json.zip</code> (или <code>.tgz</code>), например <code>jmdict-rus</code>,
+    <code>jmdict-eng</code>, <code>jmdict-ger</code> — и импортируйте архив как есть. Наш формат это
+    надмножество, так что ни конвертировать, ни распаковывать не нужно. А <code>jmdict-all</code>
+    (все языки в одном файле) брать не стоит — один огромный словарь неудобен.
+    → <a href="https://github.com/scriptin/jmdict-simplified/releases">релизы jmdict-simplified</a><br><br>
+    Хотите собрать свой словарь из другого источника (словарь Yomitan, CSV, ваши данные)? Дальше —
+    подробное описание формата.
+  </div>
+
+  <p>Приложение «Обычный японский словарь» умеет подключать ваши собственные словари. Один словарь — это
+    <strong>один JSON-файл</strong> в формате <code>od-dict/1</code>. Вы готовите такой файл, конвертируя
+    существующий словарь (например, словарь Yomitan) — вручную или с помощью LLM, — а приложение строит
+    из него свою базу.</p>
+
+  <p>Формат — это <strong>надмножество <code>jmdict-simplified</code></strong>
+    (<a href="https://github.com/scriptin/jmdict-simplified">scriptin/jmdict-simplified</a>): корректное
+    слово из jmdict-simplified уже валидно здесь, так что при таком источнике конвертация почти не нужна.</p>
+
+  <div class="callout">
+    Эта страница — удобочитаемая выжимка. Полный, сверенный с кодом контракт лежит в репозитории:
+    <a href="https://github.com/dancing-elf/ordinary-jp-dict-site/blob/main/docs/od-dict-format.md"><code>docs/od-dict-format.md</code></a>.
+  </div>
+
+  <h2>1. Файл целиком</h2>
+  <pre><code>{
+  "format": "od-dict/1",          // обязательно, точная строка
+  "source": "custom",             // обязательно; id этого словаря (§2)
+  "metadata": {                   // необязательно; только для отображения/происхождения
+    "title": "My Dictionary",
+    "license": "CC BY-SA 4.0",
+    "url": "https://…"
+  },
+  "tags": { "v1": "Ichidan verb" }, // необязательно; НЕ используется (§6)
+  "words": [
+    {
+      "id": "1259420",            // обязательно; УНИКАЛЕН в пределах файла (§3)
+      "kanji": ["食べる"],         // необязательно; опустите для слов только из каны
+      "kana":  ["たべる"],         // хотя бы одна форма (kanji или kana) обязана быть
+      "sense": [                  // обязательно; ≥1
+        {
+          "partOfSpeech": ["v1"], // необязательно; ТОЛЬКО коды POS, не текст (§4)
+          "misc": ["transitive"], // необязательно; свободные подписи, показываются как есть
+          "gloss": [              // переводы
+            { "lang": "ru", "text": "есть; кушать" },
+            "пожирать"            // голая строка = { lang: "ru", origin: "original" }
+          ],
+          "examples": [ ["ご飯を食べる", "есть рис"] ],  // необязательно; пары [японский, перевод]
+          "references": []        // необязательно; перекрёстные ссылки (§5)
+        }
+      ]
+    }
+  ]
+}</code></pre>
+
+  <h2>2. Верхний уровень</h2>
+  <table>
+    <tr><th>поле</th><th>обяз.</th><th>значение</th></tr>
+    <tr><td><code>format</code></td><td>да</td><td>Ровно <code>"od-dict/1"</code>.</td></tr>
+    <tr><td><code>source</code></td><td>да</td><td>Строка-id всего словаря. Стабильный слаг (<code>"custom"</code>, <code>"jitendex"</code>). Это пространство имён для <code>id</code> и перекрёстных ссылок. Неизвестный источник просто ранжируется <strong>после</strong> встроенных словарей — никогда не отвергается.</td></tr>
+    <tr><td><code>metadata</code></td><td>нет</td><td>Свободный объект (title, license, url). Хранится только для отображения; сборщик его не читает.</td></tr>
+    <tr><td><code>tags</code></td><td>нет</td><td>Карта <code>код → подпись</code> для совместимости с jmdict-simplified. <strong>Не используется</strong> (§6). Нужные подписи кладите прямо в <code>misc</code>.</td></tr>
+    <tr><td><code>words</code></td><td>да</td><td>Массив статей.</td></tr>
+  </table>
+  <p class="warn">Безопасность: задумано принудительно выставлять <code>source = "custom"</code> при импорте, чтобы файл не выдал себя за <code>"warodai"</code>/<code>"jmdict"</code>. <strong>Это пока не реализовано</strong> — считайте <code>source</code> рекомендательным до появления проверяющего импортёра.</p>
+
+  <h2>3. Слова и идентичность</h2>
+  <pre><code>{
+  "id": "1259420",
+  "homograph": "II",          // необязательно; различитель, если head+чтение совпадают
+  "label": "colloquial",      // необязательно; тег уровня статьи, показывается на карточке
+  "isExpression": true,       // необязательно; фраза из нескольких слов
+  "common": true,             // необязательно; высокочастотная статья
+  "kanji": ["食べる", "喰べる"],  // 0…n письменных форм
+  "kana":  ["たべる"],          // 0…n чтений
+  "sense": [ /* … */ ]
+}</code></pre>
+  <p>Идентичность — это <code>(source, id)</code>, и она <strong>UNIQUE</strong>.</p>
+  <ul>
+    <li><strong><code>id</code> обязан быть уникальным в файле.</strong> Таблица пишется обычным
+      <code>INSERT</code> с ограничением <code>UNIQUE(source, source_entry_id)</code>, поэтому
+      <strong>дубликат <code>id</code> роняет и прерывает весь батч импорта</strong> — не молча. Берите
+      собственный id источника; если его нет — синтезируйте стабильный (счётчик или сам заголовок).</li>
+    <li>Элементы <code>kanji</code>/<code>kana</code> — голая строка (норма) или объект
+      jmdict-simplified <code>{ "text": "…" }</code>; <strong>читается только <code>text</code></strong>,
+      остальное принимается, но отбрасывается. Голая строка предпочтительнее.</li>
+    <li>У слова обязана быть <strong>хотя бы одна форма</strong>. Для японского давайте <code>kana</code>;
+      для слов только из каны опускайте <code>kanji</code>.</li>
+  </ul>
+  <p><strong>Группировка.</strong> Приложение показывает <strong>одну карточку на группу
+    (заголовок + чтение)</strong>, объединяя словари. В <em>своём</em> файле выдавайте
+    <strong>одно слово на статью</strong> — все письменные формы в <code>kanji</code>, все чтения в
+    <code>kana</code>, все значения в <code>sense</code>. Если источник разбивает статью на строки
+    (Yomitan — через общий <code>sequence</code>), сначала слейте их в одно слово, иначе получите
+    несколько карточек на одну статью.</p>
+
+  <h2>4. <code>partOfSpeech</code> — единственное поле, тихо ломающее поиск</h2>
+  <p>Это единственное поле, где неверное значение <strong>убирает слово из поиска без всякой ошибки</strong>.
+    POS <em>не</em> влияет на поиск по словарной форме или чтению — <code>食べる</code> и
+    <code>たべる</code> находятся всегда. POS используется ровно в одном месте: <strong>ворота
+    деинфлексии</strong> — нахождение слова по <em>словоформе</em>, которую набрал пользователь
+    (<code>食べた</code>, <code>静かな</code>).</p>
+  <table>
+    <tr><th>POS статьи</th><th>вердикт</th><th>эффект</th></tr>
+    <tr><td>отсутствует / не класс спряжения</td><td><code>weak</code></td><td>всё равно находится, чуть ниже в ранге</td></tr>
+    <tr><td>класс спряжения, который <strong>совпал</strong></td><td><code>confirmed</code></td><td>находится, обычный ранг</td></tr>
+    <tr><td>класс спряжения, который <strong>не совпал</strong></td><td><code>rejected</code></td><td><strong>выбрасывается — не находится из этой словоформы</strong></td></tr>
+  </table>
+  <p class="warn"><strong>Не уверены в классе спряжения — опускайте <code>partOfSpeech</code> целиком.</strong>
+    Отсутствие безопасно (<code>weak</code>), ошибка фатальна (<code>rejected</code>). Опустить лучше, чем угадать.</p>
+  <p>Правила:</p>
+  <ul>
+    <li><strong>Только коды, никогда свободный текст.</strong> Читаемые подписи («verb», «honorific»)
+      кладите в <code>misc</code> — там они показываются дословно.</li>
+    <li>Значимы <strong>только классы спряжения</strong>. Прочие коды (<code>n</code>, <code>exp</code>,
+      <code>vt</code>, <code>adv</code> …) поиском игнорируются — безвредны, но бесполезны.</li>
+    <li><strong>Ловушка Yomitan: никогда не копируйте схлопнутый <code>v5</code>.</strong> У движка нет
+      класса <code>v5</code> — нужен конкретный (<code>v5k</code>, <code>v5r</code> …). Голый
+      <code>"v5"</code> не совпадает ни с чем → <code>rejected</code>, то есть <em>хуже</em>, чем
+      без тега. Берите конкретный код из <code>definitionTags</code>, либо разворачивайте по последней
+      кане словарной формы, либо опускайте.</li>
+  </ul>
+  <p>Классы спряжения, которые понимает движок:</p>
+  <pre><code>v1                              ичидан (-ru):        食べる, 見る
+v5u v5k v5g v5s v5t v5n v5b v5m v5r   годан, по финальной кане словарной формы
+vk                              来る (kuru)
+vs vs-i vs-s                    する-глаголы
+adj-i                           い-прилагательные:    高い, 良い
+adj-na                          な-прилагательные:    静か, 綺麗</code></pre>
+
+  <h2>5. Глоссы, языки и перекрёстные ссылки</h2>
+  <pre><code>"гулять"                                  // голая строка = { "lang": "ru", "origin": "original" }
+{ "lang": "en", "text": "to take a walk" }
+{ "lang": "ru", "text": "то же, что {0}", "origin": "original" }</code></pre>
+  <ul>
+    <li><strong>Голая строка — это русский</strong> (<code>lang: "ru"</code>). Для любого другого языка
+      нужен объект с <code>lang</code>.</li>
+    <li><code>origin</code> — <code>"original"</code> (по умолчанию) или <code>"machine"</code> (создано ИИ);
+      только отображение.</li>
+    <li><strong>Как <code>lang</code> влияет на поиск:</strong> глосс с <code>lang: "ru"</code> попадает в
+      русский поисковый канал, <strong>любой другой <code>lang</code> — в английский</strong>. Канал
+      выбирается по письменности запроса: кириллица → ru, латиница → en. Поэтому для
+      японско-русского словаря глоссы <strong>должны</strong> быть <code>lang: "ru"</code>, иначе
+      кириллический поиск их не найдёт. Одноязычный японский глосс (<code>lang: "ja"</code>) попадает в
+      en-канал и фактически становится <em>только отображаемым</em> — слово всё ещё находится по
+      заголовку и чтению, но не по тексту определения.</li>
+  </ul>
+  <p><strong>Перекрёстные ссылки</strong> — ICU-плейсхолдеры <code>{0}</code>, <code>{1}</code> … в тексте
+    глосса, разрешаемые через массив <code>references</code>:</p>
+  <pre><code>{
+  "gloss": [ { "lang": "ru", "text": "вежливая форма {0}" } ],
+  "references": [ { "label": "", "to": "1234567", "text": "言う" } ]
+}</code></pre>
+  <ul>
+    <li><code>{0}</code> заменяется на месте на <code>references[0].text</code> как нажимаемая ссылка.</li>
+    <li><code>to</code> — это <code>id</code> целевого слова <strong>в этом же файле</strong>; ссылка
+      открывает <code>{ source: &lt;этот словарь&gt;, id: to }</code>. Несуществующий <code>to</code>
+      просто ничего не открывает.</li>
+    <li><code>label</code> — маркер связи (<code>"see"</code>, <code>"cf."</code>), для ссылок без
+      <code>{n}</code> (рендерятся после глосса). Литеральная <code>{</code> в тексте пишется как
+      <code>'{'</code> (ICU-экранирование).</li>
+  </ul>
+
+  <h2>6. Чего формат НЕ несёт</h2>
+  <p>Эти данные приложение добавляет само, по поверхности/чтению, чтобы все словари были согласованы —
+    их <strong>не нужно</strong> задавать: тоновое ударение, фуригана, ромадзи/Поливанов,
+    частотность/«common», аудио/TTS, уровни JLPT/WaniKani, разбор кандзи. Также не используются (хотя
+    принимаются ради совместимости): верхнеуровневый <code>tags</code> и пер-форменные/пер-глоссовые
+    extras. Карточка рендерит <code>misc</code>/<code>field</code>/<code>dialect</code> как
+    <strong>свободные строки дословно</strong> — раскрытия кодов нет, кладите туда читаемые подписи.</p>
+
+  <h2>7. Минимальные примеры</h2>
+  <p>Самое маленькое слово — только кана и один русский глосс:</p>
+  <pre><code>{ "id": "w1", "kana": ["ありがとう"], "sense": [ { "gloss": ["спасибо"] } ] }</code></pre>
+  <pre><code>// (a) JA→EN годан. POS — КОНКРЕТНЫЙ класс v5k, а не "v5" из Yomitan.
+{ "id": "1578850", "kanji": ["書く"], "kana": ["かく"],
+  "sense": [ { "partOfSpeech": ["v5k", "vt"],
+    "gloss": [ { "lang": "en", "text": "to write; to compose; to pen" } ] } ] }
+
+// (b) JA→RU с внутренней перекрёстной ссылкой.
+{ "id": "敷衍", "kanji": ["敷衍", "敷延"], "kana": ["ふえん"],
+  "sense": [ { "gloss": [ { "lang": "ru", "text": "развёртывание мысли (ср. {0})" } ],
+    "references": [ { "label": "", "to": "演繹", "text": "演繹" } ] } ] }
+
+// (c) な-прилагательное только из каны. adj-na — класс деинфлексии, тег уместен.
+{ "id": "1000230", "kana": ["きれい"],
+  "sense": [ { "partOfSpeech": ["adj-na"], "gloss": ["красивый; чистый; опрятный"] } ] }</code></pre>
+
+  <h2>8. POS-allowlist</h2>
+  <p>Помещайте код в <code>partOfSpeech</code>, только если он один из этих (или подкласс jmdict,
+    начинающийся с одного из них). Всё прочее — человеческую подпись в <code>misc</code>, а здесь опустить.</p>
+  <pre><code>v1
+v5u v5k v5g v5s v5t v5n v5b v5m v5r
+vk
+vs vs-i vs-s
+adj-i
+adj-na</code></pre>
+  <p>Схлопнутый Yomitan <code>"v5"</code> → развернуть по финальной кане:
+    <code>う→v5u  く→v5k  ぐ→v5g  す→v5s  つ→v5t  ぬ→v5n  ぶ→v5b  む→v5m  る→v5r</code>.
+    Не уверены — опускайте.</p>
+
+  <p style="margin-top:36px"><a href="index.html">← На главную</a></p>
+
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© notononoto · «Обычный японский словарь»</span>
+    <nav class="sp">
+      <a href="index.html">Главная</a>
+      <a href="support.html">Поддержка</a>
+      <a href="privacy.html">Конфиденциальность</a>
+    </nav>
+  </div>
+</footer>
+
+<script defer src="/analytics.js"></script>
+
+</body>
+</html>
