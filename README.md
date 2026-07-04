@@ -100,3 +100,4 @@ The policies are English-only and language-neutral (one page per store, served f
 localized `privacy.html` chooser (`/ru/`, `/en/`, `/ja/`) is not a legal document — it just links to
 these shared policies. Apple allows a localized privacy URL per locale, but point every locale at the
 same English policy.
+
