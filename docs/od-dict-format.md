@@ -348,12 +348,13 @@ Three representative conversions (each verified to parse via `formatToEntry`):
 { "id": "1000230", "kana": ["きれい"],
   "sense": [ { "partOfSpeech": ["adj-na"], "gloss": ["красивый; чистый; опрятный"] } ] }
 
-// (d) example sentences quoted from a text, with a `tag` naming where each is taken from (§5a).
-{ "id": "1531060", "kanji": ["無鉄砲"], "kana": ["むてっぽう"],
-  "sense": [ { "partOfSpeech": ["adj-na"], "gloss": ["безрассудный; бесшабашный"],
-    "examples": [ { "text": "親譲りの無鉄砲で小供の時から損ばかりしている。",
-                    "translation": "Из-за унаследованного безрассудства я с самого детства только и знаю, что остаюсь в проигрыше.",
-                    "tag": "一/坊っちゃん" } ] } ] }
+// (d) a real corpus word from the built-in 坊っちゃん text: entry-level examples quoted from the
+//     text, each with a citation `tag` (the chapter numeral here), and no senses at all (§3, §5a).
+//     The translation is the PD English one (Morri 1918) — corpus translations are English-only.
+{ "id": "無鉄砲·むてっぽう", "kanji": ["無鉄砲"], "kana": ["むてっぽう"],
+  "examples": [ { "text": "親譲りの無鉄砲で小供の時から損ばかりしている。",
+                  "translation": "Because of an hereditary recklessness, I have been playing always a losing game since my childhood.",
+                  "tag": "一" } ] }
 ```
 
 ---

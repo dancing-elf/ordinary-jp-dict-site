@@ -271,13 +271,13 @@ adj-na                          な-adjectives:        静か, 綺麗</code></pr
 { "id": "1000230", "kana": ["きれい"],
   "sense": [ { "partOfSpeech": ["adj-na"], "gloss": [ { "lang": "en", "text": "pretty; clean; neat" } ] } ] }
 
-// (d) example sentences quoted from a text; tag names where each is taken from (§5a).
-{ "id": "1531060", "kanji": ["無鉄砲"], "kana": ["むてっぽう"],
-  "sense": [ { "partOfSpeech": ["adj-na"],
-    "gloss": [ { "lang": "en", "text": "reckless; rash" } ],
-    "examples": [ { "text": "親譲りの無鉄砲で小供の時から損ばかりしている。",
-                    "translation": "Because of the recklessness I inherited from my parents, I have been losing out ever since childhood.",
-                    "tag": "一/坊っちゃん" } ] } ] }</code></pre>
+// (d) a real corpus word from the built-in 坊っちゃん text: entry-level examples quoted
+//     from the text, a citation tag (the chapter numeral), and no senses at all (§3, §5a).
+//     The translation is the PD English one (Morri 1918).
+{ "id": "無鉄砲·むてっぽう", "kanji": ["無鉄砲"], "kana": ["むてっぽう"],
+  "examples": [ { "text": "親譲りの無鉄砲で小供の時から損ばかりしている。",
+                  "translation": "Because of an hereditary recklessness, I have been playing always a losing game since my childhood.",
+                  "tag": "一" } ] }</code></pre>
 
   <h2>8. POS allowlist</h2>
   <p>Emit a code into <code>partOfSpeech</code> only if it is one of these (or a jmdict subclass starting
