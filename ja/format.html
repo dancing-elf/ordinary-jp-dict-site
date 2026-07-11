@@ -80,7 +80,7 @@
       "id": "1259420",            // 必須；ファイル内で一意（§3）
       "kanji": ["食べる"],         // 任意；かなのみの語では省略
       "kana":  ["たべる"],         // 少なくとも 1 つの形（kanji か kana）が必要
-      "sense": [                  // 必須；1 つ以上
+      "sense": [                  // 必須；1 つ以上（空はコーパス項目のみ、§3）
         {
           "partOfSpeech": ["v1"], // 任意；コードのみ、自由文は不可（§4）
           "misc": ["transitive"], // 任意；自由なラベル、そのまま表示
@@ -88,7 +88,7 @@
             { "lang": "en", "text": "to eat" },
             "食べる"               // 裸の文字列 = { lang: "ru", origin: "original" }
           ],
-          "examples": [ ["ご飯を食べる", "ご飯を食べる"] ],  // 任意；[日本語, 訳] の組
+          "examples": [ ["ご飯を食べる", "ご飯を食べる"] ],  // 任意；例文（§5a）
           "references": []        // 任意；相互参照（§5）
         }
       ]
@@ -112,11 +112,13 @@
   "id": "1259420",
   "homograph": "II",          // 任意；見出し+読みが衝突する際の区別子
   "label": "colloquial",      // 任意；カードに表示される項目レベルのタグ
+  "headnote": "文語形は「食ぶ」",  // 任意；語義の前に表示される自由テキスト（下記参照）
   "isExpression": true,       // 任意；複数語の表現
   "common": true,             // 任意；高頻度の項目
   "kanji": ["食べる", "喰べる"],  // 0…n の表記
   "kana":  ["たべる"],          // 0…n の読み
-  "sense": [ /* … */ ]
+  "sense": [ /* … */ ],
+  "examples": [ /* … */ ]     // 任意；項目レベルのコーパス例文（§5a）
 }</code></pre>
   <p>同一性は <code>(source, id)</code> で、<strong>UNIQUE</strong> です。</p>
   <ul>
@@ -129,6 +131,16 @@
       残りは受理されますが破棄されます。裸の文字列を推奨。</li>
     <li>語には<strong>少なくとも 1 つの形</strong>が必要です。日本語では <code>kana</code> を与え、
       かなのみの語では <code>kanji</code> を省略します。</li>
+    <li><code>headnote</code> は<strong>語義の前にある項目のテキスト</strong>です — 元の辞書が見出し語と
+      最初の語義のあいだに印刷しているもの（文法の注記、用法の前書きなど）を、1 つの自由テキストとして
+      保持します。語義の上に通常の本文としてそのまま表示され、出典ごとに独立です（統合カードでは各辞書が
+      自分のものを表示）。<strong>表示専用</strong>で、検索には索引されず、形態素解析にも読まれません —
+      機械可読な文法をここに入れないでください。<code>label</code>（チップとして表示される<em>短いタグ</em>）
+      とは別物です。空白のみは無しとして扱われます。</li>
+    <li>項目レベルの <code>examples</code> は<strong>例文だけの辞書（コーパス）</strong>のためのものです：
+      特定の語義ではなく語全体に属する例文で、各例文は出典の <code>tag</code>（§5a の形 (c)）を
+      持てます。このコーパス項目だけが<strong>空の <code>sense</code></strong> を許される唯一の場合です。
+      通常の項目は例文を語義の中に入れ、<code>sense</code> は 1 つ以上必要です。</li>
   </ul>
   <p><strong>グループ化。</strong> アプリは<strong>（見出し + 読み）のグループごとに 1 枚のカード</strong>
     を、辞書をまたいで統合して表示します。<em>自分の</em>ファイルでは<strong>項目ごとに 1 語</strong>
@@ -196,6 +208,36 @@ adj-na                          な形容詞：            静か, 綺麗</code>
       末尾参照に使います。語釈文中のリテラル <code>{</code> は <code>'{'</code>（ICU エスケープ）と書きます。</li>
   </ul>
 
+  <h2>5a. 例文 — 受理される 3 つの形</h2>
+  <p><code>examples</code> の各要素は次の 3 つの形の<strong>どれでも</strong>構いません —
+    インポータが自動判別します：</p>
+  <pre><code>// (a) od-dict/1 の位置ペア — [日本語, 訳]；
+//     任意の第 3 要素はイディオムの印。
+"examples": [ ["ご飯を食べる", "to eat a meal"] ]
+
+// (b) jmdict-simplified のオブジェクト — jmdict-examples-eng リリースの形。
+//     jpn の文が例文、eng の文がその訳になる。
+"examples": [ {
+  "source": { "type": "tatoeba", "value": "162365" },
+  "text": "食べる",
+  "sentences": [ { "lang": "jpn", "text": "私はリンゴを食べる。" },
+                 { "lang": "eng", "text": "I eat an apple." } ]
+} ]
+
+// (c) od-dict/1 のコーパス・オブジェクト — ペアでは持てないもの:
+//     例文ごとの出典 tag。
+"examples": [ { "text": "彼は走った。", "translation": "He ran.", "tag": "一/坊っちゃん" } ]</code></pre>
+  <ul>
+    <li>形 (b) について：文のキーは <strong><code>lang</code></strong>（3 文字の ISO 639-3：
+      <code>jpn</code>/<code>eng</code>）。<code>jpn</code> の文が無い要素はスキップされ、訳が無ければ
+      空文字列になります。これにより生の <code>jmdict-examples-eng</code> ファイルが例文ごと
+      そのままインポートできます。</li>
+    <li>形 (c) はテキストから引用した例文のためのものです：<code>tag</code> は「どこから取ったか」
+      （章・作品）を示す自由な出典ラベルで、例文の横に表示されます。コーパス・ビルダーはこれを
+      項目レベルに出力します（§3 — 例文だけの辞書）が、<code>sense.examples</code> でも同様に
+      受理されます。</li>
+  </ul>
+
   <h2>6. この形式が持たないもの</h2>
   <p>次のものはアプリが表記・読みをキーに自前データから付与し、辞書間で一致させます — <strong>指定不要</strong>
     です：ピッチアクセント、ふりがな、ローマ字、頻度／「common」、音声、JLPT・WaniKani レベル、漢字の
@@ -218,7 +260,15 @@ adj-na                          な形容詞：            静か, 綺麗</code>
 
 // (c) かなのみの な形容詞。adj-na は活用クラスなのでタグ付けが有効。
 { "id": "1000230", "kana": ["きれい"],
-  "sense": [ { "partOfSpeech": ["adj-na"], "gloss": [ { "lang": "en", "text": "pretty; clean; neat" } ] } ] }</code></pre>
+  "sense": [ { "partOfSpeech": ["adj-na"], "gloss": [ { "lang": "en", "text": "pretty; clean; neat" } ] } ] }
+
+// (d) テキストからの引用例文；tag が各文の出典を示す（§5a）。
+{ "id": "1531060", "kanji": ["無鉄砲"], "kana": ["むてっぽう"],
+  "sense": [ { "partOfSpeech": ["adj-na"],
+    "gloss": [ { "lang": "en", "text": "reckless; rash" } ],
+    "examples": [ { "text": "親譲りの無鉄砲で小供の時から損ばかりしている。",
+                    "translation": "Because of the recklessness I inherited from my parents, I have been losing out ever since childhood.",
+                    "tag": "一/坊っちゃん" } ] } ] }</code></pre>
 
   <h2>8. POS 許可リスト</h2>
   <p>これらのいずれか（またはそれで始まる jmdict サブクラス）の場合のみ <code>partOfSpeech</code> に

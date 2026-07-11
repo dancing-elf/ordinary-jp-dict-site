@@ -32,7 +32,7 @@ almost no conversion.
       "id": "1259420",            // required; UNIQUE within this file (see §3)
       "kanji": ["食べる"],         // optional; omit for kana-only words
       "kana":  ["たべる"],         // at least one form (kanji or kana) must exist
-      "sense": [                  // required; ≥1
+      "sense": [                  // required; ≥1 (empty only for a corpus word, see §3)
         {
           "partOfSpeech": ["v1"], // optional; ONLY coded POS, never free text (see §4)
           "misc": ["transitive"], // optional; free human-readable labels, shown verbatim
@@ -40,7 +40,7 @@ almost no conversion.
             { "lang": "ru", "text": "есть; кушать" },
             "пожирать"            // bare string = { lang: "ru", origin: "original" }
           ],
-          "examples": [ ["ご飯を食べる", "есть рис"] ],   // optional; [japanese, translation] pairs
+          "examples": [ ["ご飯を食べる", "есть рис"] ],   // optional; [japanese, translation] pairs (see §5a)
           "references": []        // optional; cross-links (see §5)
         }
       ]
@@ -77,11 +77,13 @@ That is the entire format. Everything below is detail.
   "id": "1259420",
   "homograph": "II",          // optional; a disambiguator when two entries share head+reading
   "label": "colloquial",      // optional; an entry-level tag shown on the card
+  "headnote": "ὁ (gen. ἀγῶνος)", // optional; free text shown before the senses (see below)
   "isExpression": true,       // optional; multi-word phrase. If absent, inferred from the headword
   "common": true,             // optional; marks a high-frequency entry
   "kanji": ["食べる", "喰べる"],  // 0…n written forms
   "kana":  ["たべる"],          // 0…n readings
-  "sense": [ /* … */ ]
+  "sense": [ /* … */ ],
+  "examples": [ /* … */ ]     // optional; entry-level corpus examples (see §5a)
 }
 ```
 
@@ -97,6 +99,17 @@ That is the entire format. Everything below is detail.
   per-form tag row). A bare string is preferred.
 - A word needs **at least one form** (a `kanji` or a `kana`). For Japanese, give `kana`; omit `kanji`
   for kana-only words.
+- `headnote` is **the text of the entry before the senses** — whatever your dictionary prints between
+  the headword and the first meaning (gender and principal parts in a classical dictionary, a usage
+  preamble, etc.), preserved as one free-text string. It renders verbatim as ordinary body text above
+  the senses, per source (on a merged card each dictionary shows its own). It is **display-only**: it
+  is never indexed for search and never read for morphology/deinflection — do not try to encode
+  machine-readable grammar in it. Distinct from `label`, which is a *short tag* rendered as a chip.
+  Whitespace-only is treated as absent.
+- Entry-level `examples` is for an **examples-only (corpus) dictionary**: example sentences that belong
+  to the word as a whole, not to one sense — each may carry a citation `tag` (§5a shape (c)). Such a
+  corpus word is the one case where an **empty `sense`** is valid; an ordinary gloss word puts its
+  examples inside the senses and needs `sense` ≥ 1.
 
 ### Grouping
 
@@ -241,6 +254,34 @@ means you need the whole dictionary indexed by headword while converting. If you
 converting in chunks), the safe choice is to **drop the link to plain text** — keep the linked word as
 ordinary words in the gloss, with no `references` entry. A dead link is worse than no link.
 
+### 5a. Example sentences — three accepted shapes
+
+`examples` accepts **any** of these shapes per element (the importer detects which):
+
+```jsonc
+// (a) od-dict/1 positional tuple — [japanese, translation]; an optional 3rd element marks an idiom.
+"examples": [ ["ご飯を食べる", "есть рис"] ]
+
+// (b) jmdict-simplified object — as emitted by the `jmdict-examples-eng` release.
+//     The `jpn` sentence becomes the example, the `eng` sentence its translation.
+"examples": [ {
+  "source": { "type": "tatoeba", "value": "162365" },
+  "text": "食べる",
+  "sentences": [ { "lang": "jpn", "text": "私はリンゴを食べる。" },
+                 { "lang": "eng", "text": "I eat an apple." } ]
+} ]
+
+// (c) od-dict/1 corpus object — what the tuple can't carry: a per-example citation `tag`.
+"examples": [ { "text": "彼は走った。", "translation": "He ran.", "tag": "一/坊っちゃん" } ]
+```
+
+For shape (b): the per-sentence key is **`lang`** (3-letter ISO 639-3: `jpn`/`eng`), not `land`. An
+element with no `jpn` sentence is skipped; a missing translation yields an empty string. This is what
+makes a raw `jmdict-examples-eng` file import its example sentences directly.
+
+Shape (c) is what a corpus builder emits for entry-level `examples` (an examples-only dictionary);
+it is equally accepted on per-sense `examples`.
+
 ---
 
 ## 6. What the format does **not** carry
@@ -306,6 +347,13 @@ Three representative conversions (each verified to parse via `formatToEntry`):
 // (c) kana-only な-adjective. adj-na IS a deinflection class, so it's worth tagging.
 { "id": "1000230", "kana": ["きれい"],
   "sense": [ { "partOfSpeech": ["adj-na"], "gloss": ["красивый; чистый; опрятный"] } ] }
+
+// (d) example sentences quoted from a text, with a `tag` naming where each is taken from (§5a).
+{ "id": "1531060", "kanji": ["無鉄砲"], "kana": ["むてっぽう"],
+  "sense": [ { "partOfSpeech": ["adj-na"], "gloss": ["безрассудный; бесшабашный"],
+    "examples": [ { "text": "親譲りの無鉄砲で小供の時から損ばかりしている。",
+                    "translation": "Из-за унаследованного безрассудства я с самого детства только и знаю, что остаюсь в проигрыше.",
+                    "tag": "一/坊っちゃん" } ] } ] }
 ```
 
 ---
