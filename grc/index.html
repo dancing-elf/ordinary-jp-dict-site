@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Обычный древнегреческий словарь · Ordinary Ancient Greek Dictionary</title>
+<link rel="icon" href="/assets/icon-grc.png">
+<link rel="alternate" hreflang="ru" href="https://dict.notononoto.com/grc/ru/">
+<link rel="alternate" hreflang="en" href="https://dict.notononoto.com/grc/en/">
+<link rel="alternate" hreflang="x-default" href="https://dict.notononoto.com/grc/">
+<script>
+  // Авто-определение языка: русский браузер → /grc/ru/, остальные → /grc/en/.
+  (function () {
+    var l = (navigator.language || navigator.userLanguage || "").toLowerCase();
+    location.replace(l.indexOf("ru") === 0 ? "/grc/ru/" : "/grc/en/");
+  })();
+</script>
+<style>
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #f5f5f4; color: #0e0e0d; }
+  .pick { text-align: center; }
+  .pick img { width: 56px; height: 56px; border-radius: 13px; }
+  .pick a { color: #0e0e0d; text-decoration: none; font-size: 18px; margin: 0 10px; }
+  .pick a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+  <div class="pick">
+    <img src="/assets/icon-grc.png" alt="">
+    <p>Выберите язык · Choose language</p>
+    <p><a href="/grc/ru/">Русский</a> · <a href="/grc/en/">English</a></p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support — Ordinary Japanese Dictionary</title>
+<meta name="description" content="Support for Ordinary Japanese Dictionary: reporting dictionary errors, app problems and suggestions.">
+<meta name="theme-color" content="#f5f5f4">
+<link rel="icon" href="/assets/icon.png">
+<link rel="canonical" href="https://dict.notononoto.com/jp/en/support.html">
+<link rel="alternate" hreflang="en" href="https://dict.notononoto.com/jp/en/support.html">
+<link rel="alternate" hreflang="ru" href="https://dict.notononoto.com/jp/ru/support.html">
+<link rel="alternate" hreflang="ja" href="https://dict.notononoto.com/jp/ja/support.html">
+<link rel="alternate" hreflang="x-default" href="https://dict.notononoto.com/jp/">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="/assets/icon.png" alt="">
+      <span>Ordinary Dictionary</span>
+    </a>
+    <nav>
+      <a href="index.html#features">Features</a>
+      <a href="index.html#sources">Sources</a>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="format.html">Format</a>
+      <a href="/jp/ru/support.html" class="lang">RU</a>
+      <a href="/jp/ja/support.html" class="lang">JA</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section>
+<div class="wrap prose">
+
+  <h1>Support</h1>
+  <p class="updated">Help, error reports and suggestions.</p>
+
+  <p>Thanks for using the dictionary. If something looks wrong or you'd like an improvement, pick the
+    right channel below.</p>
+
+  <h2>An error in the dictionary content</h2>
+  <p>A wrong meaning or reading, a typo in an entry, a missing word — this is data from open dictionaries,
+    and corrections are made in those projects, not in the app. Report it to the source — the fix will
+    reach the app with the next update (we aim to update roughly twice a year).</p>
+  <div class="cards">
+    <a class="card-link" href="https://www.edrdg.org/jmdict/j_jmdict.html">
+      <h3>JMdict →</h3>
+      <p>English meanings — the core dictionary.</p>
+    </a>
+    <a class="card-link" href="https://www.edrdg.org/wiki/index.php/KANJIDIC_Project">
+      <h3>KanjiDic2 →</h3>
+      <p>Kanji readings and meanings.</p>
+    </a>
+  </div>
+  <p>The source of a given entry is shown on the word card and on the
+    <a href="index.html#sources">sources page</a>.</p>
+
+  <h2>An app problem or an idea</h2>
+  <p>A crash, a freeze, search behaving oddly, an awkward interface — or a suggestion. That's for us, in
+    the tracker on GitHub (a GitHub account is required):</p>
+  <div class="cards">
+    <a class="card-link" href="https://github.com/dancing-elf/ordinary-jp-dict-site/issues/new?template=bug-report.yml&labels=bug">
+      <h3>App problem →</h3>
+      <p>Crash, freeze, something not working right.</p>
+    </a>
+    <a class="card-link" href="https://github.com/dancing-elf/ordinary-jp-dict-site/issues/new?template=feature.yml&labels=enhancement">
+      <h3>Idea or request →</h3>
+      <p>What's missing, what could be smoother.</p>
+    </a>
+    <a class="card-link" href="https://github.com/dancing-elf/ordinary-jp-dict-site/issues">
+      <h3>All issues →</h3>
+      <p>See what's already been reported.</p>
+    </a>
+  </div>
+
+  <h2>FAQ</h2>
+
+  <h3>Do I need the internet?</h3>
+  <p>No. Search, sentence parsing and audio work offline. The network is only used for external links and
+    for anonymous usage statistics.</p>
+
+  <h3>Why is the app so large?</h3>
+  <p>Dictionary apps usually download their data separately after install. Here everything — the
+    dictionaries, the audio and the text analyzer — ships inside the app, so it's fully usable the
+    moment it's installed, with no extra downloads. The actual download is smaller than the installed
+    size: the store compresses apps in transit.</p>
+
+  <h3>Is it really free? Any ads or subscriptions?</h3>
+  <p>Yes — free, with no ads and no subscriptions. The app is built on open dictionaries and resources
+    made by their communities, so keeping it free is our way of saying thanks to those projects.</p>
+
+  <h3>Where do the translations come from?</h3>
+  <p>English meanings come from JMdict, with other open sources for names, kanji, furigana and pitch
+    accent. The full list with licences is on the <a href="index.html#sources">home page</a> and on the
+    “About” screen in the app.</p>
+
+  <h3>Where do the Russian kanji meanings come from?</h3>
+  <p>The Russian meanings in the kanji breakdown (漢字) are machine-generated: a machine translation of
+    KanjiDic2's English meanings, cross-checked against the
+    <a href="https://ru.wikipedia.org/wiki/Список_дзёё-кандзи">Russian Wikipedia jōyō kanji list</a>. They
+    cover the ~2,136 jōyō kanji; for the rest the English meaning is shown. They are not taken from an
+    academic kanji dictionary.</p>
+
+  <h3>Why are the kanji meanings sometimes Russian and sometimes English?</h3>
+  <p>The language of the kanji-breakdown meanings follows your first (top) active dictionary. If a
+    Russian dictionary (Warodai) is on top, meanings are Russian; if an English one (JMdict) is on top,
+    they are English. Reorder your dictionaries to switch. (If the “Kanji names” setting is set to
+    WaniKani, the English name is always shown.)</p>
+
+  <h3>Why don't some words show pitch accent?</h3>
+  <p>Pitch-accent data comes from the open Kanjium project and covers roughly half of the words. Where
+    there is no data, the contour simply isn't shown — that's a gap in the source data, not a bug.</p>
+
+  <h3>Is the audio a real voice actor?</h3>
+  <p>No — the pronunciation is synthesized (TTS) and covers the most common words. If a word has no
+    audio button, there is simply no recording for it; that's expected.</p>
+
+  <h3>How often is the dictionary updated?</h3>
+  <p>The content is updated periodically — we aim for an update roughly twice a year, pulling in fresh
+    data from the source projects. Found an error in an entry? Report it to the source
+    (<a href="https://www.edrdg.org/jmdict/j_jmdict.html">JMdict</a>) and the fix arrives with an update.</p>
+
+  <h3>How does privacy work?</h3>
+  <p>The app doesn't collect your queries, opened words or history. Details are in the
+    <a href="privacy.html">privacy policy</a>.</p>
+
+  <h3>Why does the app ask for the microphone and the camera?</h3>
+  <p>The microphone is used for voice search, the camera and photos for text recognition (OCR). Each
+    permission is requested only when you first use that feature, and everything else works without
+    them.</p>
+
+  <h3>Can I add my own dictionary?</h3>
+  <p>Yes. The app imports dictionaries in the <code>od-dict/1</code> format — see the
+    <a href="format.html">format description</a>.</p>
+
+  <h3>What is the Ancient Greek version?</h3>
+  <p>A separate app — an Ancient Greek–Russian dictionary built on the same foundation as the Japanese
+    one. The search, the word cards and the reader are shared; the language-specific parts are its own —
+    for example, a different morphology (parsing of declined and conjugated forms) and a different
+    text recognition from photos. It has its own <a href="/privacy-grc.html">privacy policy</a>.</p>
+
+  <p style="margin-top:36px"><a href="index.html">← Home</a></p>
+
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© notononoto · Ordinary Japanese Dictionary</span>
+    <nav class="sp">
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="https://github.com/dancing-elf/ordinary-jp-dict-site/issues">GitHub Issues</a>
+    </nav>
+  </div>
+</footer>
+
+<script defer src="/analytics.js"></script>
+
+</body>
+</html>

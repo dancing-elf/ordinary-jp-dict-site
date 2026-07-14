@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Обычный японский словарь · Ordinary Japanese Dictionary</title>
+<link rel="icon" href="/assets/icon.png">
+<link rel="alternate" hreflang="ru" href="https://dict.notononoto.com/jp/ru/">
+<link rel="alternate" hreflang="en" href="https://dict.notononoto.com/jp/en/">
+<link rel="alternate" hreflang="ja" href="https://dict.notononoto.com/jp/ja/">
+<link rel="alternate" hreflang="x-default" href="https://dict.notononoto.com/jp/">
+<script>
+  // Авто-определение языка: русский браузер → /jp/ru/, японский → /jp/ja/, остальные → /jp/en/.
+  (function () {
+    var l = (navigator.language || navigator.userLanguage || "").toLowerCase();
+    var dest = "/jp/en/";
+    if (l.indexOf("ru") === 0) dest = "/jp/ru/";
+    else if (l.indexOf("ja") === 0) dest = "/jp/ja/";
+    location.replace(dest);
+  })();
+</script>
+<style>
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #f5f5f4; color: #0e0e0d; }
+  .pick { text-align: center; }
+  .pick img { width: 56px; height: 56px; border-radius: 13px; }
+  .pick a { color: #0e0e0d; text-decoration: none; font-size: 18px; margin: 0 10px; }
+  .pick a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+  <div class="pick">
+    <img src="/assets/icon.png" alt="">
+    <p>Выберите язык · Choose language</p>
+    <p><a href="/jp/ru/">Русский</a> · <a href="/jp/en/">English</a> · <a href="/jp/ja/">日本語</a></p>
+  </div>
+</body>
+</html>

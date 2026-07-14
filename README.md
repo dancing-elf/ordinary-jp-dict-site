@@ -1,7 +1,7 @@
-# Ordinary Japanese Dictionary — website
+# Ordinary Dictionary — website
 
-Static landing/marketing site for the **Ordinary Japanese Dictionary** (普通の辞書) app — a
-Japanese–Russian / Japanese–English dictionary — plus a public issue tracker (GitHub Issues).
+Static landing/marketing site for the **Ordinary Japanese Dictionary** (普通の辞書) and
+**Ordinary Ancient Greek Dictionary** apps — plus a public issue tracker (GitHub Issues).
 
 Lives on **GitHub Pages** at **https://dict.notononoto.com**.
 
@@ -10,23 +10,32 @@ issue tracker.
 
 ## Structure
 
-Trilingual site: `/ru/`, `/en/`, `/ja/`; the root is a language dispatcher.
+Two dictionary sections: `/jp/` (trilingual: `/jp/ru/`, `/jp/en/`, `/jp/ja/`) and `/grc/`
+(bilingual: `/grc/ru/`, `/grc/en/`). The root is a plain dictionary hub (no auto-redirect);
+`/jp/` and `/grc/` auto-detect the language.
 
 ```
-index.html        — ROOT: auto-detects language (JS → /ru/, /en/ or /ja/) + manual picker (no-JS)
-privacy-{play,appstore,rustore}.html — ROOT: the legal policies, English only, one page per store
+index.html        — ROOT: hub linking the two dictionaries (deliberately modest, no brand names)
+privacy-{play,appstore,rustore}.html      — ROOT: the JP legal policies, English only, one per store
+privacy-{play,appstore,rustore}-grc.html  — ROOT: same for the Greek app + privacy-grc.html chooser
                     (no language segment — they are language-neutral legal documents)
 styles.css        — shared styles (no build step)
 analytics.js      — Cloudflare Web Analytics (cookieless); token lives in one place
-assets/           — icon, og image (shared across languages)
-screenshots/      — landing screenshots
+assets/           — icons (icon.png = JP, icon-grc.png = Greek), og image
+screenshots/      — landing screenshots (JP)
 docs/             — od-dict-format.md (the "full contract" the format pages link to)
 CNAME .nojekyll   — for GitHub Pages
 .github/ISSUE_TEMPLATE/ — bug / idea + redirect to Warodai/JMdict for content errors
 
-ru/   index.html · privacy.html (localized chooser → the root policies; lists RuStore) · support.html · format.html
-en/   index.html · privacy.html (localized chooser → the root policies) · support.html · format.html
-ja/   index.html · privacy.html (localized chooser → the root policies) · support.html · format.html
+jp/       index.html (language dispatcher: JS → /jp/ru|en|ja/ + no-JS picker)
+jp/ru/    index.html · privacy.html (localized chooser → the root policies; lists RuStore) · support.html · format.html
+jp/en/    index.html · privacy.html (localized chooser → the root policies) · support.html · format.html
+jp/ja/    index.html · privacy.html (localized chooser → the root policies) · support.html · format.html
+grc/      index.html (language dispatcher: JS → /grc/ru|en/ + no-JS picker)
+grc/ru/   index.html — skinny landing (no screenshots/essay/support yet)
+grc/en/   index.html — same in English
+ru/ en/ ja/ — REDIRECT STUBS only (index/format/support/privacy → /jp/<lang>/…): shipped app builds
+              link /{lang}/format.html (formatDocUrl) and old bookmarks; do NOT delete
 ```
 
 - **Name:** RU/EN use the full **«Обычный японский словарь» / Ordinary Japanese Dictionary**; JA uses
@@ -90,14 +99,14 @@ git push
 
 Base: `https://dict.notononoto.com`
 
-| Listing | URL |
-|---|---|
-| Google Play | `/privacy-play.html` |
-| App Store | `/privacy-appstore.html` |
-| RuStore | `/privacy-rustore.html` |
+| Listing | JP app | Greek app |
+|---|---|---|
+| Google Play | `/privacy-play.html` | `/privacy-play-grc.html` |
+| App Store | `/privacy-appstore.html` | `/privacy-appstore-grc.html` |
+| RuStore | `/privacy-rustore.html` | `/privacy-rustore-grc.html` |
 
 The policies are English-only and language-neutral (one page per store, served from the site root). The
-localized `privacy.html` chooser (`/ru/`, `/en/`, `/ja/`) is not a legal document — it just links to
-these shared policies. Apple allows a localized privacy URL per locale, but point every locale at the
-same English policy.
+localized `privacy.html` chooser (`/jp/ru/`, `/jp/en/`, `/jp/ja/`; the Greek app's is `/privacy-grc.html`)
+is not a legal document — it just links to these shared policies. Apple allows a localized privacy URL
+per locale, but point every locale at the same English policy.
 
